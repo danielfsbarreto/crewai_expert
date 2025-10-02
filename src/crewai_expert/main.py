@@ -1,22 +1,17 @@
 #!/usr/bin/env python
-from typing import Literal, Optional
-
 from crewai.flow import Flow, listen, router, start
-from pydantic import BaseModel
 
 from src.crewai_expert.crews import AnswerCrewaiPromptCrew
-
-
-class CrewaiExpertState(BaseModel):
-    # Inputs
-    prompt: Optional[str] = None
-    run_type: Literal["update_embeddings", "answer_prompt"] = "answer_prompt"
-
-    # State data filled by the agents
-    final_answer: Optional[str] = None
+from src.crewai_expert.services import DocFilesChunkingService
+from src.crewai_expert.types import CrewaiExpertState
 
 
 class CrewaiExpertFlow(Flow[CrewaiExpertState]):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.doc_files_chunking_service = DocFilesChunkingService()
+
     @start()
     def validate_inputs(self):
         if self.state.run_type == "answer_prompt" and self.state.prompt is None:
@@ -27,14 +22,10 @@ class CrewaiExpertFlow(Flow[CrewaiExpertState]):
         return self.state.run_type
 
     @listen("update_embeddings")
-    def update_embeddings_path(self):
-        print("The path is", self.state.run_type)
+    async def update_embeddings_path(self):
+        self.state.doc_files = await self.doc_files_chunking_service.call()
 
     @listen("answer_prompt")
-    def answer_prompt_path(self):
-        print("The path is", self.state.run_type)
-
-    @listen(answer_prompt_path)
     def come_up_with_curated_answer(self):
         result = (
             AnswerCrewaiPromptCrew()
@@ -47,9 +38,7 @@ class CrewaiExpertFlow(Flow[CrewaiExpertState]):
 
 
 def kickoff():
-    CrewaiExpertFlow().kickoff(
-        inputs={"prompt": "Como crio uma ferramenta customizada?"}
-    )
+    CrewaiExpertFlow().kickoff(inputs={"run_type": "update_embeddings"})
 
 
 def plot():
