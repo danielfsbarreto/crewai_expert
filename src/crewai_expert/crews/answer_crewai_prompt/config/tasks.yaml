@@ -1,0 +1,37 @@
+identify_language:
+  description: >
+    Given the user prompt, identify its language so you are able to
+    respond in the same language.
+
+    User prompt: {prompt}.
+  expected_output: >
+    The language of the user prompt.
+    Examples: Brazilian Portuguese (pt-BR),  English (en-US), Japanese (ja-JP).
+  async_execution: true
+  agent: linguist
+
+research_proper_answer:
+  description: >
+    Given the user prompt, research for a proper answer.
+    Return nothing but the answer in Markdown format.
+
+    User prompt: {prompt}.
+  expected_output: >
+    The answer in Markdown format.
+  async_execution: true
+  agent: crewai_expert
+
+format_final_answer:
+  description: >
+    Given the language of the user prompt and the answer researched by the
+    CrewAI Expert agent, format a final response.
+
+    Make sure to collaborate with the CrewAI Expert agent to format the answer
+    in a nice yet correct way.
+  expected_output: >
+    The final response in Markdown format.
+  async_execution: false
+  context:
+    - identify_language
+    - research_proper_answer
+  agent: formatter
