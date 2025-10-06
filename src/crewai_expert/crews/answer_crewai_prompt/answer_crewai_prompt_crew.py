@@ -1,8 +1,10 @@
+import os
 from typing import List
 
 from crewai import Agent, Crew, Process, Task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from crewai.project import CrewBase, agent, crew, task
+from crewai_tools import QdrantVectorSearchTool
 
 
 @CrewBase
@@ -12,6 +14,9 @@ class AnswerCrewaiPromptCrew:
 
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
+
+    def __init__(self, collection_name: str):
+        self.collection_name = collection_name
 
     @agent
     def linguist(self) -> Agent:
@@ -23,6 +28,16 @@ class AnswerCrewaiPromptCrew:
     def crewai_expert(self) -> Agent:
         return Agent(
             config=self.agents_config["crewai_expert"],  # type: ignore[index]
+            reasoning=True,
+            tools=[
+                QdrantVectorSearchTool(
+                    qdrant_url=os.getenv("QDRANT_URL"),
+                    qdrant_api_key=os.getenv("QDRANT_API_KEY"),
+                    collection_name=self.collection_name,
+                    limit=5,
+                    score_threshold=0.5,
+                )
+            ],
         )
 
     @agent

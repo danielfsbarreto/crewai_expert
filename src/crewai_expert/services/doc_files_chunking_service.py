@@ -42,6 +42,10 @@ class DocFilesChunkingService:
         self._openai_client = OpenAI(api_key=self._OPENAI_API_KEY)
         self._collection_name = self._latest_collection_name()
 
+    @property
+    def collection_name(self):
+        return self._collection_name
+
     async def call(self):
         self._get_files()
         await self._chunk_files()
@@ -61,7 +65,7 @@ class DocFilesChunkingService:
     async def _chunk_files(self):
         async def chunk_file(file: DocFile, pbar: tqdm):
             file_content = await self._github_client.get_file_content_async(file.path)
-            file_chunks = MdxChunker(file_content).chunk()
+            file_chunks = MdxChunker(file_content).chunk_content()
 
             file.content = file_content
             file.chunks = [
@@ -91,7 +95,7 @@ class DocFilesChunkingService:
                 all_chunks.append({"text": chunk.text, "metadata": chunk.metadata})
 
         texts_to_embed = [chunk["text"] for chunk in all_chunks]
-        batch_size = 256
+        batch_size = 32
         embeddings = []
 
         with tqdm(

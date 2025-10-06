@@ -28,7 +28,9 @@ class CrewaiExpertFlow(Flow[CrewaiExpertState]):
     @listen("answer_prompt")
     def come_up_with_curated_answer(self):
         result = (
-            AnswerCrewaiPromptCrew()
+            AnswerCrewaiPromptCrew(
+                collection_name=self.doc_files_chunking_service.collection_name
+            )
             .crew()
             .kickoff(inputs={"prompt": self.state.prompt})
         )
@@ -38,7 +40,12 @@ class CrewaiExpertFlow(Flow[CrewaiExpertState]):
 
 
 def kickoff():
-    CrewaiExpertFlow().kickoff(inputs={"run_type": "update_embeddings"})
+    # CrewaiExpertFlow().kickoff(inputs={"run_type": "update_embeddings"})
+    CrewaiExpertFlow().kickoff(
+        inputs={
+            "prompt": "Me relate todas as formas de criar uma tool customizada com CrewAI"
+        }
+    )
 
 
 def plot():

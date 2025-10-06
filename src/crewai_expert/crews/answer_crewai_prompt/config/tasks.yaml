@@ -16,6 +16,14 @@ research_proper_answer:
     Return nothing but the answer in Markdown format.
 
     User prompt: {prompt}.
+
+    GUIDELINES:
+    ===========
+    - Always use the QdrantVectorSearchTool to search for the answer
+    - This tool only accepts queries written in en-US language
+    - Interact with it multiple times if necessary to get a high-quality answer
+    - Plan ahead to optimize the output quality and minimize the number of interactions with the tool
+    - If you find a file that is highly connected to the user prompt, get all its content through filter_by (metadata.file_path) and filter_value parameters
   expected_output: >
     The answer in Markdown format.
   async_execution: true
