@@ -23,7 +23,7 @@ class CrewaiExpertFlow(Flow[CrewaiExpertState]):
 
     @listen("update_embeddings")
     async def update_embeddings_path(self):
-        self.state.doc_files = await self.doc_files_chunking_service.call()
+        await self.doc_files_chunking_service.call()
 
     @listen("answer_prompt")
     def come_up_with_curated_answer(self):
