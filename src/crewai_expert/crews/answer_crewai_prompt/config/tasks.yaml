@@ -20,7 +20,8 @@ research_proper_answer:
     ===========
     - Always use the QdrantVectorSearchTool to search for anything related to CrewAI
     - This tool only accepts queries written in en-US language
-    - Interact with it multiple times if necessary to get a high-quality answer
+    - Interact with it multiple times if necessary to get a high-quality answer.
+    However, be mindful of the cost of the interactions. You need to respond fast, so plan ahead.
     - If you find a file that is highly connected to the user prompt, get all its content through filter_by (metadata.file_path) and filter_value parameters
     However, be mindful that whenever doing this, the tool does not accept a `query` parameter. In such cases, send an empty string as the query
   expected_output: >
