@@ -5,7 +5,7 @@ from semchunk import chunk
 class MdxChunker:
     def __init__(self, file_content: str):
         self.file_content = file_content
-        self.max_tokens = 4096
+        self.max_tokens = 512
         self.overlap = 0.2
 
     def chunk_content(self):

@@ -90,13 +90,15 @@ class DocFilesChunkingService:
         self._create_collection()
 
         all_chunks = []
+        embeddings = []
+        points = []
+        batch_size = 32
+
         for file in self._files:
             for chunk in file.chunks:
                 all_chunks.append({"text": chunk.text, "metadata": chunk.metadata})
 
         texts_to_embed = [chunk["text"] for chunk in all_chunks]
-        batch_size = 32
-        embeddings = []
 
         with tqdm(
             total=len(texts_to_embed), desc="Generating embeddings", unit="chunk"
@@ -110,7 +112,6 @@ class DocFilesChunkingService:
                 embeddings.extend(batch_embeddings)
                 pbar.update(len(batch_chunks))
 
-        points = []
         for i, (chunk_dict, embedding) in enumerate(zip(all_chunks, embeddings)):
             point = PointStruct(
                 id=str(uuid.uuid4()),
@@ -122,7 +123,6 @@ class DocFilesChunkingService:
             )
             points.append(point)
 
-        batch_size = 256
         with tqdm(
             total=len(points), desc="Saving embeddings to Qdrant", unit="chunk"
         ) as pbar:
@@ -136,7 +136,7 @@ class DocFilesChunkingService:
         print(
             f"Successfully saved {len(points)} embeddings to Qdrant collection '{self._collection_name}'"
         )
-        self._delete_older_collections()
+        self._delete_collection()
 
     def _latest_collection_name(self):
         collections = self._qdrant_client.get_collections()
@@ -153,6 +153,12 @@ class DocFilesChunkingService:
                     size=3072,
                     distance=Distance.COSINE,
                 ),
+            )
+
+            self._qdrant_client.create_payload_index(
+                collection_name=self._collection_name,
+                field_name="text",
+                field_schema=PayloadSchemaType.KEYWORD,
             )
 
             self._qdrant_client.create_payload_index(
@@ -175,11 +181,14 @@ class DocFilesChunkingService:
             print(f"Error creating collection: {e}")
             raise
 
-    def _delete_older_collections(self):
-        collections = self._qdrant_client.get_collections()
-        collection_names = [col.name for col in collections.collections]
+    def _delete_collection(self):
+        new_collection = self._qdrant_client.get_collection(self._collection_name)
+        if new_collection.points_count == 0:
+            self._qdrant_client.delete_collection(self._collection_name)
+            print(f"Deleted Qdrant collection '{self._collection_name}'")
+            return
 
-        for collection_name in collection_names:
-            if collection_name != self._collection_name:
-                self._qdrant_client.delete_collection(collection_name)
-                print(f"Deleted Qdrant collection '{collection_name}'")
+        for collection in self._qdrant_client.get_collections().collections:
+            if collection.name != self._collection_name:
+                self._qdrant_client.delete_collection(collection.name)
+                print(f"Deleted Qdrant collection '{collection.name}'")

@@ -13,17 +13,16 @@ identify_language:
 research_proper_answer:
   description: >
     Given the user prompt, research for a proper answer.
-    Return nothing but the answer in Markdown format.
 
     User prompt: {prompt}.
 
-    GUIDELINES:
+    GUIDELINES
     ===========
-    - Always use the QdrantVectorSearchTool to search for the answer
+    - Always use the QdrantVectorSearchTool to search for anything related to CrewAI
     - This tool only accepts queries written in en-US language
     - Interact with it multiple times if necessary to get a high-quality answer
-    - Plan ahead to optimize the output quality and minimize the number of interactions with the tool
     - If you find a file that is highly connected to the user prompt, get all its content through filter_by (metadata.file_path) and filter_value parameters
+    However, be mindful that whenever doing this, the tool does not accept a `query` parameter. In such cases, send an empty string as the query
   expected_output: >
     The answer in Markdown format.
   async_execution: true
@@ -36,6 +35,11 @@ format_final_answer:
 
     Make sure to collaborate with the CrewAI Expert agent to format the answer
     in a nice yet correct way.
+
+    GUIDELINES
+    ===========
+    - Do not include links in the answer
+    - Favor adding coding examples whenever applicable
   expected_output: >
     The final response in Markdown format.
   async_execution: false
