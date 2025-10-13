@@ -5,9 +5,12 @@ identify_language:
 
     User prompt: {prompt}.
   expected_output: >
-    The language of the user prompt.
-    Examples: Brazilian Portuguese (pt-BR),  English (en-US), Japanese (ja-JP).
-  async_execution: true
+    A phrase like "The language of the user prompt is 'language'."
+    Examples:
+    - The language of the user prompt is Brazilian Portuguese (pt-BR)
+    - The language of the user prompt is English (en-US)
+    - The language of the user prompt is Japanese (ja-JP)
+  async_execution: false
   agent: linguist
 
 research_proper_answer:
@@ -25,8 +28,10 @@ research_proper_answer:
     - If you find a file that is highly connected to the user prompt, get all its content through filter_by (metadata.file_path) and filter_value parameters
     However, be mindful that whenever doing this, the tool does not accept a `query` parameter. In such cases, send an empty string as the query
   expected_output: >
-    The answer in Markdown format.
-  async_execution: true
+    The answer in Markdown format respecting the language of the user prompt.
+  async_execution: false
+  context:
+    - identify_language
   agent: crewai_expert
 
 format_final_answer:

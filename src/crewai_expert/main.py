@@ -40,7 +40,7 @@ class CrewaiExpertFlow(Flow[CrewaiExpertState]):
 
 def kickoff():
     CrewaiExpertFlow().kickoff(
-        inputs={"prompt": "What are the types of memory built into CrewAI?"}
+        inputs={"prompt": "How to build custom tools in CrewAI?"}
         # inputs={"run_type": "update_embeddings"}
     )
 

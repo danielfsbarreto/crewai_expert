@@ -58,11 +58,11 @@ class AnswerCrewaiPromptCrew:
             config=self.tasks_config["research_proper_answer"],  # type: ignore[index]
         )
 
-    @task
-    def format_final_answer(self) -> Task:
-        return Task(
-            config=self.tasks_config["format_final_answer"],  # type: ignore[index]
-        )
+    # @task
+    # def format_final_answer(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config["format_final_answer"],  # type: ignore[index]
+    #     )
 
     @crew
     def crew(self) -> Crew:
@@ -71,5 +71,5 @@ class AnswerCrewaiPromptCrew:
             tasks=self.tasks,
             process=Process.sequential,
             verbose=True,
-            memory=True,
+            # memory=True,
         )
