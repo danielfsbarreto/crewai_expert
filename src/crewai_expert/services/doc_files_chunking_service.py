@@ -191,7 +191,7 @@ class DocFilesChunkingService:
         for collection in self._qdrant_client.get_collections().collections:
             if (
                 collection.name != self._collection_name
-                and self._collection_name in collection.name
+                and self._QDRANT_COLLECTION_PREFIX in collection.name
             ):
                 self._qdrant_client.delete_collection(collection.name)
                 print(f"Deleted Qdrant collection '{collection.name}'")
