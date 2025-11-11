@@ -28,7 +28,6 @@ class AnswerCrewaiPromptCrew:
     def crewai_expert(self) -> Agent:
         return Agent(
             config=self.agents_config["crewai_expert"],  # type: ignore[index]
-            reasoning=True,
             tools=[
                 QdrantVectorSearchTool(
                     qdrant_config={

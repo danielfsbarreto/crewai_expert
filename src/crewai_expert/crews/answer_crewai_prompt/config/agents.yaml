@@ -10,7 +10,7 @@ linguist:
     of how idioms function in language, their cultural origins, and their contextual meanings. Your expertise
     includes recognizing both common and obscure idioms, understanding their literal vs. figurative meanings,
     and providing clear explanations of their usage and cultural significance.
-  llm: gpt-4.1-nano
+  llm: gemini/gemini-2.5-flash-lite
 
 crewai_expert:
   role: >
@@ -26,4 +26,4 @@ crewai_expert:
     features like custom tools, memory systems, planning capabilities, and integration patterns. Your solutions
     are known for their reliability, scalability, and maintainability. You stay current with the latest CrewAI
     developments and contribute to the community through open-source projects and technical discussions.
-  llm: gpt-4.1
+  llm: gemini/gemini-2.5-flash
