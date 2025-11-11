@@ -1,15 +1,15 @@
 from crewai.flow import Flow, listen, router, start
 
-from src.crewai_expert.crews import AnswerCrewaiPromptCrew
-from src.crewai_expert.services import DocFilesChunkingService
-from src.crewai_expert.types import CrewaiExpertState
+from crewai_expert.crews import AnswerCrewaiPromptCrew
+from crewai_expert.services import DocFilesChunkingService
+from crewai_expert.types import CrewaiExpertState
 
 
 class CrewaiExpertFlow(Flow[CrewaiExpertState]):
     def __init__(self, *args, **kwargs):
         self.doc_files_chunking_service = DocFilesChunkingService()
 
-        super().__init__(*args, **kwargs)
+        super().__init__(tracing=True, *args, **kwargs)
 
     @start()
     def validate_inputs(self):
@@ -40,7 +40,8 @@ class CrewaiExpertFlow(Flow[CrewaiExpertState]):
 
 def kickoff():
     CrewaiExpertFlow().kickoff(
-        inputs={"prompt": "How to build custom tools in CrewAI?"}
+        # inputs={"prompt": "How to build custom tools in CrewAI?"}
+        # inputs={"prompt": "How to decide when to build a crew vs flows?"}
         # inputs={"run_type": "update_embeddings"}
     )
 

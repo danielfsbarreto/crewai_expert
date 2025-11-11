@@ -10,7 +10,6 @@ identify_language:
     - The language of the user prompt is Brazilian Portuguese (pt-BR)
     - The language of the user prompt is English (en-US)
     - The language of the user prompt is Japanese (ja-JP)
-  async_execution: false
   agent: linguist
 
 research_proper_answer:
@@ -23,33 +22,11 @@ research_proper_answer:
     ===========
     - Always use the QdrantVectorSearchTool to search for anything related to CrewAI
     - This tool only accepts queries written in en-US language
-    - Interact with it multiple times if necessary to get a high-quality answer.
-    However, be mindful of the cost of the interactions. You need to respond fast, so plan ahead.
-    - If you find a file that is highly connected to the user prompt, get all its content through filter_by (metadata.file_path) and filter_value parameters
-    However, be mindful that whenever doing this, the tool does not accept a `query` parameter. In such cases, send an empty string as the query
+    - Interact with it multiple times if necessary to get a high-quality answer. However, be mindful of the cost of the interactions. You need to respond fast, so plan ahead
+    - If you find a file that is highly connected to the user prompt, get all its content through filter_by (metadata.file_path) and filter_value parameters repeating the same query parameter
   expected_output: >
     The answer in Markdown format respecting the language of the user prompt.
-  async_execution: false
   context:
     - identify_language
+  markdown: true
   agent: crewai_expert
-
-format_final_answer:
-  description: >
-    Given the language of the user prompt and the answer researched by the
-    CrewAI Expert agent, format a final response.
-
-    Make sure to collaborate with the CrewAI Expert agent to format the answer
-    in a nice yet correct way.
-
-    GUIDELINES
-    ===========
-    - Do not include links in the answer
-    - Favor adding coding examples whenever applicable
-  expected_output: >
-    The final response in Markdown format.
-  async_execution: false
-  context:
-    - identify_language
-    - research_proper_answer
-  agent: formatter

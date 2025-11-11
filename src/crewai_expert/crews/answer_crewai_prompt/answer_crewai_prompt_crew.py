@@ -31,19 +31,14 @@ class AnswerCrewaiPromptCrew:
             reasoning=True,
             tools=[
                 QdrantVectorSearchTool(
-                    qdrant_url=os.getenv("QDRANT_URL"),
-                    qdrant_api_key=os.getenv("QDRANT_API_KEY"),
-                    collection_name=self.collection_name,
-                    limit=5,
-                    score_threshold=0.5,
+                    qdrant_config={
+                        "qdrant_url": os.getenv("QDRANT_URL"),
+                        "qdrant_api_key": os.getenv("QDRANT_API_KEY"),
+                        "collection_name": self.collection_name,
+                        "limit": 5,
+                    }
                 )
             ],
-        )
-
-    @agent
-    def formatter(self) -> Agent:
-        return Agent(
-            config=self.agents_config["formatter"],  # type: ignore[index]
         )
 
     @task
@@ -58,12 +53,6 @@ class AnswerCrewaiPromptCrew:
             config=self.tasks_config["research_proper_answer"],  # type: ignore[index]
         )
 
-    # @task
-    # def format_final_answer(self) -> Task:
-    #     return Task(
-    #         config=self.tasks_config["format_final_answer"],  # type: ignore[index]
-    #     )
-
     @crew
     def crew(self) -> Crew:
         return Crew(
@@ -71,5 +60,4 @@ class AnswerCrewaiPromptCrew:
             tasks=self.tasks,
             process=Process.sequential,
             verbose=True,
-            # memory=True,
         )
