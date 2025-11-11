@@ -8,9 +8,9 @@ from qdrant_client.http.models import PayloadSchemaType
 from qdrant_client.models import Distance, PointStruct, VectorParams
 from tqdm import tqdm
 
-from src.crewai_expert.clients import GithubClient
-from src.crewai_expert.types import DocFile, DocFileChunk
-from src.crewai_expert.utils import MdxChunker
+from crewai_expert.clients import GithubClient
+from crewai_expert.types import DocFile, DocFileChunk
+from crewai_expert.utils import MdxChunker
 
 
 class DocFilesChunkingService:
