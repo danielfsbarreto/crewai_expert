@@ -21,13 +21,13 @@ class AnswerCrewaiPromptCrew:
     @agent
     def linguist(self) -> Agent:
         return Agent(
-            config=self.agents_config["linguist"],  # type: ignore[index]
+            config=self.agents_config["linguist"],
         )
 
     @agent
     def crewai_expert(self) -> Agent:
         return Agent(
-            config=self.agents_config["crewai_expert"],  # type: ignore[index]
+            config=self.agents_config["crewai_expert"],
             tools=[
                 QdrantVectorSearchTool(
                     qdrant_config={
@@ -43,13 +43,13 @@ class AnswerCrewaiPromptCrew:
     @task
     def identify_language(self) -> Task:
         return Task(
-            config=self.tasks_config["identify_language"],  # type: ignore[index]
+            config=self.tasks_config["identify_language"],
         )
 
     @task
     def research_proper_answer(self) -> Task:
         return Task(
-            config=self.tasks_config["research_proper_answer"],  # type: ignore[index]
+            config=self.tasks_config["research_proper_answer"],
         )
 
     @crew
