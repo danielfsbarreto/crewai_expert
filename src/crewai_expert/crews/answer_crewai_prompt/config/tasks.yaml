@@ -1,0 +1,31 @@
+identify_language:
+  description: >
+    Given the user prompt, identify its language so you are able to
+    respond in the same language.
+
+    User prompt: {prompt}.
+  expected_output: >
+    A phrase like "The language of the user prompt is 'language'."
+    Examples:
+    - The language of the user prompt is Brazilian Portuguese (pt-BR)
+    - The language of the user prompt is English (en-US)
+    - The language of the user prompt is Japanese (ja-JP)
+  agent: linguist
+
+research_proper_answer:
+  description: >
+    Given the user prompt, research for a proper answer.
+
+    User prompt: {prompt}.
+
+    GUIDELINES
+    ===========
+    - Always use the MongoDBVectorSearchTool to search for anything related to CrewAI
+    - This tool only accepts queries written in en-US language
+    - Interact with it multiple times if necessary (entering similar but different queries) to get a higher-quality content
+  expected_output: >
+    The answer in Markdown format respecting the language of the user prompt.
+  context:
+    - identify_language
+  markdown: true
+  agent: crewai_expert

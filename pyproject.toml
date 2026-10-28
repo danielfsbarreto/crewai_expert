@@ -1,0 +1,26 @@
+[project]
+name = "crewai_expert"
+version = "0.1.0"
+description = "crewai_expert using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[anthropic, tools]>=1.15.14,<1.16",
+    "crewai-tools[mongodb]",
+    "semchunk>=3.2.3",
+    "tiktoken<0.9.dev0",
+    "tqdm>=4.67.1",
+]
+
+[project.scripts]
+kickoff = "crewai_expert.main:kickoff"
+run_crew = "crewai_expert.main:kickoff"
+plot = "crewai_expert.main:plot"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "flow"
+project_id = "fa9df33c-f307-44bb-b510-9d4ed29994c6"
