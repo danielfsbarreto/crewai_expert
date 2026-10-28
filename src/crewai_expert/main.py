@@ -1,3 +1,5 @@
+from typing import Literal
+
 from crewai.flow import Flow, listen, router, start
 
 from crewai_expert.crews import AnswerCrewaiPromptCrew
@@ -14,7 +16,7 @@ class CrewaiExpertFlow(Flow[CrewaiExpertState]):
             raise ValueError("The input `prompt` needs to be provided")
 
     @router(validate_inputs)
-    def identify_path(self):
+    def identify_path(self) -> Literal["update_embeddings", "answer_prompt"]:
         return self.state.run_type
 
     @listen("update_embeddings")
@@ -41,6 +43,10 @@ def kickoff():
         # inputs={"prompt": "How to build custom tools in CrewAI?"}
         # inputs={"prompt": "How to decide when to build a crew vs flows?"}
     )
+
+
+def plot():
+    CrewaiExpertFlow().plot()
 
 
 if __name__ == "__main__":
